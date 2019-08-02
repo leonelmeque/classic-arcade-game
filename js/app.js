@@ -7,7 +7,7 @@ var Enemy = function() {
   // a helper we've provided to easily load images
   this.sprite = "images/enemy-bug.png";
   this.positionX = 0;
-  this.positionY = 50;
+  this.positionY = 0;
   this.speed = 0;
 };
 
@@ -17,6 +17,8 @@ Enemy.prototype.update = function(dt) {
   // You should multiply any movement by the dt parameter
   // which will ensure the game runs at the same speed for
   // all computers.
+  ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
+  this.speed = dt;
 };
 
 // Draw the enemy on the screen, required method for game
@@ -44,16 +46,16 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(direction) {
   switch (direction) {
     case "right":
-      this.positionX += 20;
+      this.positionX += 100;
       break;
     case "left":
-      this.positionX -= 20;
+      this.positionX -= 100;
       break;
     case "up":
-      this.positionY -= 20;
+      this.positionY -= 85;
       break;
     case "down":
-      this.positionY += 20;
+      this.positionY += 85;
       break;
     default:
       break;
@@ -62,12 +64,27 @@ Player.prototype.handleInput = function(direction) {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemy = new Enemy();
+var enemy; 
 var allEnemies = [];
 
 var player = new Player();
 
-allEnemies.push(enemy);
+(function loadEnemies(){
+    var count = 0;
+    var posX = 50;
+    while(count<=2){
+        enemy = new Enemy();
+        switch(count){
+            case 0 : enemy.positionY = 50;break;
+            case 1 : enemy.positionY = 140;break;
+            case 2 : enemy.positionY = 230; break;
+        }
+        allEnemies.push(enemy);
+        count++;
+    }
+})();
+
+
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener("keyup", function(e) {
@@ -80,3 +97,14 @@ document.addEventListener("keyup", function(e) {
 
   player.handleInput(allowedKeys[e.keyCode]);
 });
+
+function moveEnemies(pos){
+    allEnemies[pos].positionX+=allEnemies[pos].speed;
+}
+
+(function turnOnEnemies(){ 
+    setInterval(moveEnemies,allEnemies[0].speed,0);
+    console.log(allEnemies[1].speed);
+    setInterval(moveEnemies,allEnemies[1].speed,1);
+    setInterval(moveEnemies,allEnemies[2].speed,2); 
+})();
