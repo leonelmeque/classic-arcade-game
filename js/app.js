@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-var Enemy = function() {
+function Enemy() {
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
 
@@ -9,7 +9,7 @@ var Enemy = function() {
   this.positionX = 0;
   this.positionY = 0;
   this.speed = 0;
-};
+}
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -46,44 +46,63 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(direction) {
   switch (direction) {
     case "right":
-      this.positionX += 100;
+      if (this.positionX < canvasLimits(direction)) this.positionX += 100;
       break;
     case "left":
-      this.positionX -= 100;
+        if (this.positionX > canvasLimits(direction))  this.positionX -= 100;
       break;
     case "up":
-      this.positionY -= 85;
+        if (this.positionY > canvasLimits(direction))  this.positionY -= 85;
       break;
     case "down":
-      this.positionY += 85;
+        if (this.positionY < canvasLimits(direction))   this.positionY += 85;
       break;
     default:
       break;
   }
 };
+
+// Canvas Limits expressions
+function canvasLimits(direction) {
+  var result = 0;
+  if (direction === "right") {
+    result = canvas.width - canvas.width * 0.25;
+    return result;
+  } else if (direction === "down") {
+    result = canvas.height - canvas.height * 0.35;
+    console.log(result);
+    return result;
+  }
+  return result;
+}
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
-var enemy; 
+var enemy;
 var allEnemies = [];
-
+var canvas = document.querySelector("canvas");
 var player = new Player();
 
-(function loadEnemies(){
-    var count = 0;
-    var posX = 50;
-    while(count<=2){
-        enemy = new Enemy();
-        switch(count){
-            case 0 : enemy.positionY = 50;break;
-            case 1 : enemy.positionY = 140;break;
-            case 2 : enemy.positionY = 230; break;
-        }
-        allEnemies.push(enemy);
-        count++;
-    }
-})();
+(function loadEnemies() {
+  var count = 0;
 
+  while (count <= 2) {
+    enemy = new Enemy();
+    switch (count) {
+      case 0:
+        enemy.positionY = 50;
+        break;
+      case 1:
+        enemy.positionY = 140;
+        break;
+      case 2:
+        enemy.positionY = 230;
+        break;
+    }
+    allEnemies.push(enemy);
+    count++;
+  }
+})();
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
@@ -98,13 +117,13 @@ document.addEventListener("keyup", function(e) {
   player.handleInput(allowedKeys[e.keyCode]);
 });
 
-function moveEnemies(pos){
-    allEnemies[pos].positionX+=allEnemies[pos].speed;
+function moveEnemies(pos, speed) {
+  allEnemies[pos].positionX = 1 + allEnemies[pos].positionX;
 }
 
-(function turnOnEnemies(){ 
-    setInterval(moveEnemies,allEnemies[0].speed,0);
-    console.log(allEnemies[1].speed);
-    setInterval(moveEnemies,allEnemies[1].speed,1);
-    setInterval(moveEnemies,allEnemies[2].speed,2); 
+(function turnOnEnemies() {
+  console.log(canvas.width);
+  setInterval(moveEnemies, allEnemies[0].speed, 0);
+  setInterval(moveEnemies, allEnemies[1].speed, 1, allEnemies[1].speed);
+  setInterval(moveEnemies, allEnemies[2].speed, 2, allEnemies[2].speed);
 })();
