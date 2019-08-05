@@ -1,14 +1,56 @@
 // Enemies our player must avoid
-function Enemy() {
+function Enemy(){
   // Variables applied to each of our instances go here,
   // we've provided one for you to get started
 
   // The image/sprite for our enemies, this uses
   // a helper we've provided to easily load images
-  this.sprite = "images/enemy-bug.png";
-  this.positionX = 0;
-  this.positionY = 0;
-  this.speed = 0;
+    this.sprite = "images/enemy-bug.png";
+    this.positionX = 0;
+    this.positionY = 0;
+    this.speed = 0;
+    this.timer = 0;
+  
+  bugSpeed = function() {
+    var speed = Math.floor(Math.random()*10),
+        temp=0,
+        free = false;
+          while(!free){
+            
+            if(speed!==0){
+                free=true;
+               
+                return speed;
+              }else{
+                 speed = Math.floor(Math.random()*20);
+                
+              }
+             
+        }
+  };
+  this.moveLoop=(width)=>{
+    if(this.positionX<width){
+      this.positionX++;
+      }else{
+      clearInterval(this.timer);
+      this.positionX = -50;
+      switchPositionY(this.positionY);
+      this.move();
+    }
+  };
+
+  this.move=()=>{
+    this.timer = setInterval(this.moveLoop,bugSpeed(),canvas.width);
+  };
+  
+}
+
+
+var switchPositionY =  function (positionY){
+    
+    if(allEnemies[0].positionY===positionY){
+      console.log('time for a switch');
+    }
 }
 
 // Update the enemy's position, required method for game
@@ -117,13 +159,10 @@ document.addEventListener("keyup", function(e) {
   player.handleInput(allowedKeys[e.keyCode]);
 });
 
-function moveEnemies(pos, speed) {
-  allEnemies[pos].positionX = 1 + allEnemies[pos].positionX;
-}
-
+allEnemies.forEach((object)=>{
+    object.move();
+    
+});
 (function turnOnEnemies() {
-  console.log(canvas.width);
-  setInterval(moveEnemies, allEnemies[0].speed, 0);
-  setInterval(moveEnemies, allEnemies[1].speed, 1, allEnemies[1].speed);
-  setInterval(moveEnemies, allEnemies[2].speed, 2, allEnemies[2].speed);
+  
 })();
