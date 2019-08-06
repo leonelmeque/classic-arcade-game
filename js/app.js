@@ -47,15 +47,24 @@ function Enemy() {
    if you want to develop video games you need to know a lot of math and physics
    function source: https://www.youtube.com/watch?v=XYzA_kPWyJ8
 */
-function Gems (){
-      this.sprite ='images/GemBlue.png';
-      this.points = function(){
-              if(type==='Blue'){return 50} else
-              if(type==='Green'){return 100} else
-              if(type==='Orange'){return 350} 
-      };
-      this.posX = 110;
-      this.posY = 285;
+function Gems() {
+  this.sprite = "images/GemBlue.png";
+  this.points = function() {
+    if (type === "Blue") {
+      return 50;
+    } else if (type === "Green") {
+      return 100;
+    } else if (type === "Orange") {
+      return 350;
+    }
+  };
+  this.posX = 0;
+  this.posY = 0;
+}
+
+function Coordinates(x, y) {
+  this.x = x;
+  this.y = y;
 }
 
 function getDistance(pX, pY, enX, enY) {
@@ -99,6 +108,48 @@ function collision(posX, posY) {
   }
 }
 
+function gemCollision(){
+  
+
+  var count=0, mapPosX,mapPosY=[72,154,236];
+  const place = mapArray.filter(function(object) {
+       
+      mapPosX = object.x - 10;
+      
+    if(player.positionX===mapPosX && player.positionY===mapPosY[count]){
+      console.log(player.positionY);
+      return object;
+    }
+    count++;
+    if(count===3){
+      count=0;
+    }
+   
+  } )
+  console.log(place);
+  // mapArray.forEach(function checkPosition(object){
+  //   mapPosX = object.x - 10;
+  //    if(player.positionX===mapPosX && player.positionY===mapPosY[count]){
+      
+  //       for(let gem of allGems){
+                      
+  //         if(gem.posX===object.x && gem.posY===object.y){
+  //           console.log("Player position iquals "+object.x+' and '+object.y);
+  //           console.log("Collision of gem");
+  //           break;
+  //         }
+  //         count++;
+  //         if(count===3){
+  //           console.log("Player Y value "+count);
+  //           break;
+  //         }
+  //       }
+  //    }
+     
+  // })
+ 
+}
+
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
@@ -121,9 +172,9 @@ Gems.prototype.update = function(dt) {
   this.speed = dt;
 };
 
-Gems.prototype.render = function(){
-  ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY,80,80);
-}
+Gems.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY, 80, 80);
+};
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -142,8 +193,10 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.handleInput = function(direction) {
+  
   switch (direction) {
     case "right":
+      // console.log(getDistance(this.positionX,this.positionY,allGems[0].posX,allGems[0].posY));
       if (this.positionX < canvasLimits(direction)) this.positionX += 100;
       break;
     case "left":
@@ -158,6 +211,7 @@ Player.prototype.handleInput = function(direction) {
     default:
       break;
   }
+ 
 };
 
 // Canvas Limits expressions
@@ -179,9 +233,26 @@ var enemy;
 var gems;
 var allEnemies = [];
 var allGems = [];
+var mapArray = [];
 var canvas = document.querySelector("canvas");
 var player = new Player();
 
+(function loadCoordinates() {
+  var x = 10,
+  y = [120, 200, 285];
+
+  for (let row = 0; row < 3; row++) {
+    for (let col = 0; col < 5; col++) {
+      // console.log("position X: " + x + " position Y: " + y[row]);
+      mapArray.push(new Coordinates(x, y[row]));
+      x += 100;
+      if (x > 410) {
+        x = 10;
+      }
+    }
+  }
+  // console.log(mapArray);
+})();
 
 (function loadEnemiesAndGems() {
   var count = 0;
@@ -202,11 +273,13 @@ var player = new Player();
     allEnemies.push(enemy);
     count++;
   }
- 
+
   count = 0;
-  while(count<8){
+  shuffle(mapArray);
+  while (count < 8) {
     gems = new Gems();
-    
+    gems.posX = mapArray[count].x;
+    gems.posY = mapArray[count].y;
     allGems.push(gems);
     count++;
   }
@@ -223,6 +296,7 @@ document.addEventListener("keyup", function(e) {
   };
 
   player.handleInput(allowedKeys[e.keyCode]);
+  gemCollision();
 });
 
 allEnemies.forEach(object => {
