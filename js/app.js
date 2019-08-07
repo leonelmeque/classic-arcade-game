@@ -108,46 +108,27 @@ function collision(posX, posY) {
   }
 }
 
-function gemCollision(){
-  
+function gemCollision() {
+  if (player.positionY === 72) {
+    gemCollisionHelper(120);
+  } else if (player.positionY === 154) {
+    gemCollisionHelper(200);
+  } else if (player.positionY === 236) {
+    gemCollisionHelper(285);    
+  }
+}
 
-  var count=0, mapPosX,mapPosY=[72,154,236];
-  const place = mapArray.filter(function(object) {
-       
-      mapPosX = object.x - 10;
-      
-    if(player.positionX===mapPosX && player.positionY===mapPosY[count]){
-      console.log(player.positionY);
-      return object;
+function gemCollisionHelper(posY) {
+  for (let col = 0; col < allGems.length; col++) {
+    if (
+      player.positionX + 10 === allGems[col].posX &&
+      posY === allGems[col].posY
+    ) {
+      console.log("Collision removing: " + allGems.splice(col, 1));
+      return true;
     }
-    count++;
-    if(count===3){
-      count=0;
-    }
-   
-  } )
-  console.log(place);
-  // mapArray.forEach(function checkPosition(object){
-  //   mapPosX = object.x - 10;
-  //    if(player.positionX===mapPosX && player.positionY===mapPosY[count]){
-      
-  //       for(let gem of allGems){
-                      
-  //         if(gem.posX===object.x && gem.posY===object.y){
-  //           console.log("Player position iquals "+object.x+' and '+object.y);
-  //           console.log("Collision of gem");
-  //           break;
-  //         }
-  //         count++;
-  //         if(count===3){
-  //           console.log("Player Y value "+count);
-  //           break;
-  //         }
-  //       }
-  //    }
-     
-  // })
- 
+  }
+  return false;
 }
 
 // Update the enemy's position, required method for game
@@ -193,7 +174,6 @@ Player.prototype.render = function() {
 };
 
 Player.prototype.handleInput = function(direction) {
-  
   switch (direction) {
     case "right":
       // console.log(getDistance(this.positionX,this.positionY,allGems[0].posX,allGems[0].posY));
@@ -211,7 +191,7 @@ Player.prototype.handleInput = function(direction) {
     default:
       break;
   }
- 
+  gemCollision();
 };
 
 // Canvas Limits expressions
@@ -239,11 +219,10 @@ var player = new Player();
 
 (function loadCoordinates() {
   var x = 10,
-  y = [120, 200, 285];
+    y = [120, 200, 285];
 
   for (let row = 0; row < 3; row++) {
     for (let col = 0; col < 5; col++) {
-      // console.log("position X: " + x + " position Y: " + y[row]);
       mapArray.push(new Coordinates(x, y[row]));
       x += 100;
       if (x > 410) {
@@ -296,7 +275,6 @@ document.addEventListener("keyup", function(e) {
   };
 
   player.handleInput(allowedKeys[e.keyCode]);
-  gemCollision();
 });
 
 allEnemies.forEach(object => {
