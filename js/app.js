@@ -13,12 +13,10 @@ function Enemy() {
 
   bugSpeed = function() {
     var speed = Math.floor(Math.random() * 10),
-      temp = 0,
       free = false;
     while (!free) {
       if (speed > 2) {
         free = true;
-
         return speed;
       } else {
         speed = Math.floor(Math.random() * 20);
@@ -67,6 +65,16 @@ function Coordinates(x, y) {
   this.y = y;
 }
 
+// Now write your own player class
+// This class requires an update(), render() and
+// a handleInput() method.
+let Player = function() {
+  this.sprite = "images/char-boy.png";
+  this.positionX = 200;
+  this.positionY = 400;
+  this.life = 3;
+};
+
 function getDistance(pX, pY, enX, enY) {
   let xDistance = enX - pX,
     yDistance = enY - pY;
@@ -102,10 +110,15 @@ var switchPositionY = function(positionX) {
 
 function collision(posX, posY) {
   let number = getDistance(player.positionX, player.positionY, posX, posY);
-  if (number < 60) {
+  if (number < 60 && player.life!=0) {
     player.positionX = 200;
     player.positionY = 400;
+    player.life--;
+  }else if(player.life===0) {
+    console.log("You Lost");
   }
+
+  
 }
 
 function gemCollision() {
@@ -125,6 +138,10 @@ function gemCollisionHelper(posY) {
       posY === allGems[col].posY
     ) {
       console.log("Collision removing: " + allGems.splice(col, 1));
+      if(allGems.length===0 && player.life!=0 && showKey===false){
+        addMoreGems();
+        player.positionY = 400;
+      }
       return true;
     }
   }
@@ -156,14 +173,7 @@ Gems.prototype.update = function(dt) {
 Gems.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY, 80, 80);
 };
-// Now write your own player class
-// This class requires an update(), render() and
-// a handleInput() method.
-let Player = function() {
-  this.sprite = "images/char-boy.png";
-  this.positionX = 200;
-  this.positionY = 400;
-};
+
 
 Player.prototype.update = function() {
   ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
@@ -210,13 +220,12 @@ function canvasLimits(direction) {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var enemy;
-var gems;
 var allEnemies = [];
 var allGems = [];
 var mapArray = [];
 var canvas = document.querySelector("canvas");
 var player = new Player();
-
+var showKey = false;
 (function loadCoordinates() {
   var x = 10,
     y = [120, 200, 285];
@@ -232,6 +241,18 @@ var player = new Player();
   }
   // console.log(mapArray);
 })();
+
+var addMoreGems = function (){
+  var count = 0;
+  shuffle(mapArray);
+  while (count < 8) {
+    var gems = new Gems();
+    gems.posX = mapArray[count].x;
+    gems.posY = mapArray[count].y;
+    allGems.push(gems);
+    count++;
+  }
+};
 
 (function loadEnemiesAndGems() {
   var count = 0;
@@ -256,7 +277,7 @@ var player = new Player();
   count = 0;
   shuffle(mapArray);
   while (count < 8) {
-    gems = new Gems();
+    var gems = new Gems();
     gems.posX = mapArray[count].x;
     gems.posY = mapArray[count].y;
     allGems.push(gems);
