@@ -90,6 +90,9 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
+        allGems.forEach(function(gems){
+            gems.update(dt);
+        })
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
@@ -139,6 +142,7 @@ var Engine = (function(global) {
         }
 
         renderEntities();
+        
     }
 
     /* This function is called by the render function and is called on each game
@@ -151,7 +155,9 @@ var Engine = (function(global) {
          */
        
         allGems.forEach(function(gems){  
-            gems.render();
+            
+                gems.render();
+            
         });
         player.render();
         allEnemies.forEach(function(enemy) {
@@ -165,6 +171,9 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
+        if(player.life===0){
+            alert("game over");
+        }
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -178,7 +187,8 @@ var Engine = (function(global) {
         'images/enemy-bug.png',
         'images/char-boy.png',
         'images/Key.png',
-        'images/GemBlue.png'
+        'images/GemBlue.png',
+        'images/GemGreen.png'
     ]);
     Resources.onReady(init);
 

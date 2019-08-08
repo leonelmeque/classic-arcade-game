@@ -27,7 +27,7 @@ function Enemy() {
   this.moveLoop = width => {
     if (this.positionX < width) {
       this.positionX++;
-      collision(this.positionX, this.positionY);
+      collision(this.positionX, this.positionY, this.timer);
     } else {
       clearInterval(this.timer);
       this.positionX = -50;
@@ -40,13 +40,9 @@ function Enemy() {
     this.timer = setInterval(this.moveLoop, bugSpeed(), canvas.width);
   };
 }
-/* I used this function to make my collisions more precise
-   this function uses the Pythagorean Theorem, I one had teach who told me:
-   if you want to develop video games you need to know a lot of math and physics
-   function source: https://www.youtube.com/watch?v=XYzA_kPWyJ8
-*/
-function Gems() {
-  this.sprite = "images/GemBlue.png";
+
+function Gems(gemName) {
+  this.sprite = `images/Gem${gemName}.png`;
   this.points = function() {
     if (type === "Blue") {
       return 50;
@@ -74,7 +70,11 @@ let Player = function() {
   this.positionY = 400;
   this.life = 3;
 };
-
+/* I used this function to make my collisions more precise
+   this function uses the Pythagorean Theorem, I one had teach who told me:
+   if you want to develop video games you need to know a lot of math and physics
+   function source: https://www.youtube.com/watch?v=XYzA_kPWyJ8
+*/
 function getDistance(pX, pY, enX, enY) {
   let xDistance = enX - pX,
     yDistance = enY - pY;
@@ -107,18 +107,20 @@ var switchPositionY = function(positionX) {
     allEnemies[2].positionY = position[0];
   }
 };
-
-function collision(posX, posY) {
+// Game logic changed a bit
+//a key will show up in 1min and  30sec only after that the player can finish the game,
+//the player has to get the most number of gems and points during the game.
+function collision(posX, posY, timer) {
   let number = getDistance(player.positionX, player.positionY, posX, posY);
-  if (number < 60 && player.life!=0) {
+  if (number < 60 && player.life != 0) {
     player.positionX = 200;
     player.positionY = 400;
     player.life--;
-  }else if(player.life===0) {
-    console.log("You Lost");
+  } else if (player.life === 0) {
+    clearInterval(timer);
+    allEnemies = [];
+    allGems = [];
   }
-
-  
 }
 
 function gemCollision() {
@@ -127,7 +129,7 @@ function gemCollision() {
   } else if (player.positionY === 154) {
     gemCollisionHelper(200);
   } else if (player.positionY === 236) {
-    gemCollisionHelper(285);    
+    gemCollisionHelper(285);
   }
 }
 
@@ -138,14 +140,12 @@ function gemCollisionHelper(posY) {
       posY === allGems[col].posY
     ) {
       console.log("Collision removing: " + allGems.splice(col, 1));
-      if(allGems.length===0 && player.life!=0 && showKey===false){
-        addMoreGems();
+      if (allGems.length === 0 && player.life != 0 && showKey === false) {
         player.positionY = 400;
+        addMoreGems();
       }
-      return true;
     }
   }
-  return false;
 }
 
 // Update the enemy's position, required method for game
@@ -173,7 +173,6 @@ Gems.prototype.update = function(dt) {
 Gems.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY, 80, 80);
 };
-
 
 Player.prototype.update = function() {
   ctx.drawImage(Resources.get(this.sprite), this.positionX, this.positionY);
@@ -226,6 +225,43 @@ var mapArray = [];
 var canvas = document.querySelector("canvas");
 var player = new Player();
 var showKey = false;
+let addMoreGems = newGems();
+
+function newGems() {
+  var count = 0,
+    gemColor = ["Blue", "Green", "Orange"];
+  let gemController = 0;
+  var gems;
+  shuffle(mapArray);
+  return function() {
+    setTimeout(() => {
+      for (let i = 0; i < 8; i++) {
+        if (i < 1) {
+          gems = new Gems("Green");
+          gems.posX = mapArray[i].x;
+          gems.posY = mapArray[i].y;
+          allGems.push(gems);
+        }
+
+        (function() {
+          setTimeout(() => {
+            gems = new Gems("Green");
+            gems.posX = mapArray[i].x;
+            gems.posY = mapArray[i].y;
+            console.log(i);
+            allGems.push(gems);
+          }, 200 * i);
+        })();
+      }
+    }, 500);
+
+    gemController += 1;
+    count += 1;
+
+    return gemController;
+  };
+}
+
 (function loadCoordinates() {
   var x = 10,
     y = [120, 200, 285];
@@ -241,18 +277,6 @@ var showKey = false;
   }
   // console.log(mapArray);
 })();
-
-var addMoreGems = function (){
-  var count = 0;
-  shuffle(mapArray);
-  while (count < 8) {
-    var gems = new Gems();
-    gems.posX = mapArray[count].x;
-    gems.posY = mapArray[count].y;
-    allGems.push(gems);
-    count++;
-  }
-};
 
 (function loadEnemiesAndGems() {
   var count = 0;
@@ -277,7 +301,7 @@ var addMoreGems = function (){
   count = 0;
   shuffle(mapArray);
   while (count < 8) {
-    var gems = new Gems();
+    var gems = new Gems("Blue");
     gems.posX = mapArray[count].x;
     gems.posY = mapArray[count].y;
     allGems.push(gems);
