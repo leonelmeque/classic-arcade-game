@@ -1,3 +1,6 @@
+
+let points = document.querySelector('#points');
+let lives = document.querySelector('#lives');
 // Enemies our player must avoid
 function Enemy() {
   // Variables applied to each of our instances go here,
@@ -117,6 +120,8 @@ function collision(posX, posY, timer) {
     player.positionX = 200;
     player.positionY = 400;
     player.life--;
+    
+      lives.textContent=player.life;
   } else if (player.life === 0) {
     clearInterval(timer);
     allEnemies = [];
@@ -140,7 +145,8 @@ function gemCollisionHelper(posY) {
       player.positionX + 10 === allGems[col].posX &&
       posY === allGems[col].posY
     ) {
-      console.log(allGems[col].points());
+      player.points+=allGems[col].points();
+      points.textContent=player.points;
        allGems.splice(col, 1);
       if (allGems.length === 0 && player.life != 0 && showKey === false) {
         player.positionY = 400;

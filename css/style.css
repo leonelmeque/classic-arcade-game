@@ -1,12 +1,19 @@
 body {
     text-align: center;
+    width: 800px;
+    margin: 0 auto;
+    background:rgb(72, 160, 69);
+    color:white;
 }
+
 
 .grid{
     display:grid;
- 
+    height: 100vh;
     grid-template-columns: 1fr 1fr;
-    grid-template-areas: 
+    grid-template-rows: 100px auto;
+    grid-template-areas:
+    "header header" 
     "menu canvas";
 }
 
@@ -14,8 +21,15 @@ canvas{
     grid-area: canvas;
 }
 
+h1{
+    grid-area: header;
+    width: 100%;
+    text-align: center;
+}
 #menu{
     grid-area: menu;
-    background: #00ff55;
+    background: #181818;
+    height: 535px;
+    margin-top: 50px ;
 
 }
