@@ -1,45 +1,74 @@
+*{
+    margin:0;
+    padding:0;
+}
 body {
-  text-align: center;
-  width: 800px;
-  margin: 0 auto;
-  background: rgb(72, 160, 69);
-  color: white;
+    text-align: center;
+    background: rgb(116, 185, 255);
 }
 
-.grid {
-  display: grid;
-  height: 100vh;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 100px auto;
-  grid-template-areas:
-    "header header"
-    "menu canvas";
+.menu1{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
 }
 
-canvas {
-  grid-area: canvas;
+#header{
+    text-align: center;
+    width: 100%;
+    height: 50px;
 }
 
-h1 {
-  grid-area: header;
-  width: 100%;
-  text-align: center;
+ul  {
+    text-align: center;
+    list-style-type: none;
+    padding:0;
+    width: 200px;
+    margin: 0 auto;
 }
 
-#menu {
-  grid-area: menu;
-  background: #181818;
-  height: 535px;
-  margin-top: 50px;
+li{
+    margin: 20px 0px;
+}
+#timer{
+    font-size: 70px;
+    text-align:center;
+
+}
+canvas{
+    text-align:center;
+}
+.menu-button{
+    background: white; 
+    padding: 10px 0;
+    display: inline-block;
+    border-radius: 50px;
+    text-align: center;
+    border:none;
+    cursor: pointer;
+    width: 100%;
+    text-decoration:none;
+}
+
+#points, #lives, .points{
+    display: inline;
 }
 
 .modal {
+    background: rgba(214, 48, 49,0.8);
+    height: 100vmax;
+    width: 100%;
     position: absolute;
     display: none;
-    left:0;
-    top:0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(120,120,120,0.2);
-    
+}
+
+.modal-content .menu-button{
+    width: 300px;
+    margin: 0 auto;
+}
+
+.modal-content{
+     height: inherit;
+     margin: auto 0;
 }

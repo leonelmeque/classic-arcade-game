@@ -5,25 +5,40 @@
     <title>Effective JavaScript: Frogger</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="grid">
-
-    <div id="winner" class="modal">
-        <div class="modal-content">
-            <h2>Your Have One The Game</h2>
-            <button onclick="restartGame()">Restart Game</button>
-        </div>
-    </div>
-    <h1>Classic Arcade Game</h1>
-    <div id="menu">
-        <h2>Key will show in:</h2>
-        <p id="timer">00:00</p>
-        <h2>POINTS</h2>
-        <p id="points">0</p>
-        <h2>LIVES</h2>
-        <span id="lives">2</span>
-    </div>
+<body >
+        <div id="winner" class="modal">
+                <div class="modal-content">
+                    <h2>Your Have One The Game</h2>
+                    <button class="menu-button" onclick="restartGame()">Restart Game</button>
+                </div>
+            </div>
+            <div id="header">
+                <h1>Classic Arcade Game</h1>
+            </div>
+            <div class="menu1">
+                <ul>
+                    <li><button class="menu-button">Start Game</button></li>
+                    <li><button class="menu-button">Instructions</button></li>
+                    <li><button class="menu-button">About</button></li>
+                </ul>
+            </div>
+            <p id="timer"></p>
+            <div class="score">
+                    <p class="points">POINTS</p>
+                    <p id="points">0</p>
+                    <p id = "lives">LIVES</p>
+                    <span>2</span>
+            </div>
+            
+           
+  
+   
+    
     <script src="js/resources.js"></script>
     <script src="js/engine.js"></script>
+    <footer>
+        game created by Leonel Meque
+    </footer>
     <script src="js/app.js"></script>
 </body>
 </html>

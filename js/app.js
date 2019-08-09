@@ -1,6 +1,5 @@
-
-let points = document.querySelector('#points');
-let lives = document.querySelector('#lives');
+let points = document.querySelector("#points");
+let lives = document.querySelector("#lives");
 // Enemies our player must avoid
 function Enemy() {
   // Variables applied to each of our instances go here,
@@ -45,10 +44,10 @@ function Enemy() {
 }
 
 let gameKey = {
-    sprite: 'images/Key.png',
-    posX:200,
-    posY:-10
-}
+  sprite: "images/Key.png",
+  posX: 200,
+  posY: -10
+};
 
 function Gems(gemName) {
   this.sprite = `images/Gem${gemName}.png`;
@@ -127,13 +126,13 @@ function collision(posX, posY, timer) {
     player.positionX = 200;
     player.positionY = 400;
     player.life--;
-    
-      lives.textContent=player.life;
+
+    lives.textContent = player.life;
   } else if (player.life === 0) {
     clearInterval(timer);
     allEnemies = [];
     allGems = [];
-  }else if (player.life!=0 && showKey===true && player.win!=false){
+  } else if (player.life != 0 && showKey === true && player.win != false) {
     clearInterval(timer);
     allEnemies = [];
   }
@@ -146,7 +145,7 @@ function gemCollision() {
     gemCollisionHelper(200);
   } else if (player.positionY === 236) {
     gemCollisionHelper(285);
-  }else if(player.positionY===-10){
+  } else if (player.positionY === -10) {
     keyCollision();
   }
 }
@@ -157,9 +156,9 @@ function gemCollisionHelper(posY) {
       player.positionX + 10 === allGems[col].posX &&
       posY === allGems[col].posY
     ) {
-      player.points+=allGems[col].points();
-      points.textContent=player.points;
-       allGems.splice(col, 1);
+      player.points += allGems[col].points();
+      points.textContent = player.points;
+      allGems.splice(col, 1);
       if (allGems.length === 0 && player.life != 0) {
         player.positionY = 400;
         addMoreGems();
@@ -168,14 +167,13 @@ function gemCollisionHelper(posY) {
   }
 }
 
-function keyCollision(){
-  var modal = document.queryCommandEnabled('.modal')
-  if(player.positionX===gameKey.posX && player.positionY ===gameKey.posY){
-    player.win=true;
-    modal.set
-  }  
+function keyCollision() {
+  var modal = document.querySelector(".modal");
+  if (player.positionX === gameKey.posX && player.positionY === gameKey.posY) {
+    player.win = true;
+    modal.style.display = "block";
+  }
 }
-
 
 gameKey.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY);
@@ -218,7 +216,6 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(direction) {
   switch (direction) {
     case "right":
-     
       if (this.positionX < canvasLimits(direction)) this.positionX += 100;
       break;
     case "left":
@@ -249,8 +246,6 @@ function canvasLimits(direction) {
   return result;
 }
 
-
-
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -262,63 +257,67 @@ var canvas = document.querySelector("canvas");
 var player = new Player();
 var showKey = false;
 let addMoreGems = newGems();
-let stopTime, seconds=60;
+let stopTime,
+  seconds = 10;
 
 (function timerTrigger() {
   resetTime = false;
   seconds--;
   document.getElementById("timer").innerHTML = seconds + " s";
 
-  if(seconds!=0){
+  if (seconds != 0) {
     stopTime = setTimeout(timerTrigger, 1000);
-  }else{
-    showKey=true;
+  } else {
+    showKey = true;
     allGems = [];
     clearTimeout(stopTime);
   }
 })();
 
 function newGems() {
-  let gemController = 0;
+  let gemController = 0,
+    factoryStop;
   shuffle(mapArray);
   return function() {
-
     setTimeout(() => {
       for (let i = 0; i < 8; i++) {
-        if (i < 0) {
-          createGem(i,gemController);
+       
+          if (i < 0) {
+            createGem(i, gemController);
+          }
+  
+          (function() {
+            factoryStop = setTimeout(() => {
+              createGem(i, gemController);
+            }, 200 * i);
+          })();
         }
-
-        (function() {
-          setTimeout(() => {
-            createGem(i,gemController);
-          }, 200 * i);
-        })();
-      }
+        
+      
     }, 500);
 
     gemController += 1;
-   
+
     return gemController;
   };
 }
 
-function createGem(index,controller){
-  console.log(controller);
-  gemColor = ["Blue", "Green", "Orange"];
+function createGem(index, controller) {
+  if (showKey !== true) {
+    gemColor = ["Blue", "Green", "Orange"];
   var gems = new Gems("Blue");
   gems.posX = mapArray[index].x;
   gems.posY = mapArray[index].y;
-
-  if(controller==1){
-    gems.sprite = 'images/GemGreen.png';
-  }else if(controller>2){
-    shuffle(gemColor);
-    gems.sprite = `images/Gem${gemColor[0]}.png`;
-    
+    if (controller == 1) {
+      gems.sprite = "images/GemGreen.png";
+    } else if (controller > 2) {
+      shuffle(gemColor);
+      gems.sprite = `images/Gem${gemColor[0]}.png`;
+    }
+  
+    allGems.push(gems);
   }
   
-  allGems.push(gems);
 }
 
 (function loadCoordinates() {
