@@ -153,7 +153,9 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-       
+        if(seconds===0){
+            gameKey.render();
+        }
         allGems.forEach(function(gems){  
             
                 gems.render();
@@ -163,6 +165,8 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
+       
+        
     }
 
     /* This function does nothing but it could have been a good place to

@@ -44,6 +44,12 @@ function Enemy() {
   };
 }
 
+let gameKey = {
+    sprite: 'images/Key.png',
+    posX:200,
+    posY:-10
+}
+
 function Gems(gemName) {
   this.sprite = `images/Gem${gemName}.png`;
   this.points = function() {
@@ -73,6 +79,7 @@ let Player = function() {
   this.positionY = 400;
   this.life = 3;
   this.points = 0;
+  this.win = false;
 };
 /* I used this function to make my collisions more precise
    this function uses the Pythagorean Theorem, I one had teach who told me:
@@ -126,6 +133,9 @@ function collision(posX, posY, timer) {
     clearInterval(timer);
     allEnemies = [];
     allGems = [];
+  }else if (player.life!=0 && showKey===true && player.win!=false){
+    clearInterval(timer);
+    allEnemies = [];
   }
 }
 
@@ -136,6 +146,8 @@ function gemCollision() {
     gemCollisionHelper(200);
   } else if (player.positionY === 236) {
     gemCollisionHelper(285);
+  }else if(player.positionY===-10){
+    keyCollision();
   }
 }
 
@@ -148,13 +160,26 @@ function gemCollisionHelper(posY) {
       player.points+=allGems[col].points();
       points.textContent=player.points;
        allGems.splice(col, 1);
-      if (allGems.length === 0 && player.life != 0 && showKey === false) {
+      if (allGems.length === 0 && player.life != 0) {
         player.positionY = 400;
         addMoreGems();
       }
     }
   }
 }
+
+function keyCollision(){
+  var modal = document.queryCommandEnabled('.modal')
+  if(player.positionX===gameKey.posX && player.positionY ===gameKey.posY){
+    player.win=true;
+    modal.set
+  }  
+}
+
+
+gameKey.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.posX, this.posY);
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -223,6 +248,9 @@ function canvasLimits(direction) {
   }
   return result;
 }
+
+
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -234,6 +262,21 @@ var canvas = document.querySelector("canvas");
 var player = new Player();
 var showKey = false;
 let addMoreGems = newGems();
+let stopTime, seconds=60;
+
+(function timerTrigger() {
+  resetTime = false;
+  seconds--;
+  document.getElementById("timer").innerHTML = seconds + " s";
+
+  if(seconds!=0){
+    stopTime = setTimeout(timerTrigger, 1000);
+  }else{
+    showKey=true;
+    allGems = [];
+    clearTimeout(stopTime);
+  }
+})();
 
 function newGems() {
   let gemController = 0;
