@@ -188,7 +188,8 @@ var Engine = (function(global) {
         'images/char-boy.png',
         'images/Key.png',
         'images/GemBlue.png',
-        'images/GemGreen.png'
+        'images/GemGreen.png',
+        'images/GemOrange.png'
     ]);
     Resources.onReady(init);
 

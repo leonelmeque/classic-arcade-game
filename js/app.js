@@ -44,11 +44,11 @@ function Enemy() {
 function Gems(gemName) {
   this.sprite = `images/Gem${gemName}.png`;
   this.points = function() {
-    if (type === "Blue") {
+    if (this.sprite === "images/GemBlue.png") {
       return 50;
-    } else if (type === "Green") {
+    } else if (this.sprite === "images/GemGreen.png") {
       return 100;
-    } else if (type === "Orange") {
+    } else if (this.sprite === "images/GemOrange.png") {
       return 350;
     }
   };
@@ -69,6 +69,7 @@ let Player = function() {
   this.positionX = 200;
   this.positionY = 400;
   this.life = 3;
+  this.points = 0;
 };
 /* I used this function to make my collisions more precise
    this function uses the Pythagorean Theorem, I one had teach who told me:
@@ -139,7 +140,8 @@ function gemCollisionHelper(posY) {
       player.positionX + 10 === allGems[col].posX &&
       posY === allGems[col].posY
     ) {
-      console.log("Collision removing: " + allGems.splice(col, 1));
+      console.log(allGems[col].points());
+       allGems.splice(col, 1);
       if (allGems.length === 0 && player.life != 0 && showKey === false) {
         player.positionY = 400;
         addMoreGems();
@@ -185,7 +187,7 @@ Player.prototype.render = function() {
 Player.prototype.handleInput = function(direction) {
   switch (direction) {
     case "right":
-      // console.log(getDistance(this.positionX,this.positionY,allGems[0].posX,allGems[0].posY));
+     
       if (this.positionX < canvasLimits(direction)) this.positionX += 100;
       break;
     case "left":
@@ -228,38 +230,46 @@ var showKey = false;
 let addMoreGems = newGems();
 
 function newGems() {
-  var count = 0,
-    gemColor = ["Blue", "Green", "Orange"];
   let gemController = 0;
-  var gems;
   shuffle(mapArray);
   return function() {
+
     setTimeout(() => {
       for (let i = 0; i < 8; i++) {
-        if (i < 1) {
-          gems = new Gems("Green");
-          gems.posX = mapArray[i].x;
-          gems.posY = mapArray[i].y;
-          allGems.push(gems);
+        if (i < 0) {
+          createGem(i,gemController);
         }
 
         (function() {
           setTimeout(() => {
-            gems = new Gems("Green");
-            gems.posX = mapArray[i].x;
-            gems.posY = mapArray[i].y;
-            console.log(i);
-            allGems.push(gems);
+            createGem(i,gemController);
           }, 200 * i);
         })();
       }
     }, 500);
 
     gemController += 1;
-    count += 1;
-
+   
     return gemController;
   };
+}
+
+function createGem(index,controller){
+  console.log(controller);
+  gemColor = ["Blue", "Green", "Orange"];
+  var gems = new Gems("Blue");
+  gems.posX = mapArray[index].x;
+  gems.posY = mapArray[index].y;
+
+  if(controller==1){
+    gems.sprite = 'images/GemGreen.png';
+  }else if(controller>2){
+    shuffle(gemColor);
+    gems.sprite = `images/Gem${gemColor[0]}.png`;
+    
+  }
+  
+  allGems.push(gems);
 }
 
 (function loadCoordinates() {
@@ -301,10 +311,7 @@ function newGems() {
   count = 0;
   shuffle(mapArray);
   while (count < 8) {
-    var gems = new Gems("Blue");
-    gems.posX = mapArray[count].x;
-    gems.posY = mapArray[count].y;
-    allGems.push(gems);
+    createGem(count);
     count++;
   }
 })();

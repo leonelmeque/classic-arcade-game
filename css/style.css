@@ -1,3 +1,21 @@
 body {
     text-align: center;
 }
+
+.grid{
+    display:grid;
+ 
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: 
+    "menu canvas";
+}
+
+canvas{
+    grid-area: canvas;
+}
+
+#menu{
+    grid-area: menu;
+    background: #00ff55;
+
+}
