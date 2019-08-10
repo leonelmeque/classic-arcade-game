@@ -8,32 +8,46 @@
 <body >
         <div id="winner" class="modal">
                 <div class="modal-content">
-                    <h2>Your Have One The Game</h2>
+                    <h2 class="message" ></h2>
+                    <br>
+                    <p class="info"></p>
+                     <br>
                     <button class="menu-button" onclick="restartGame()">Restart Game</button>
                 </div>
             </div>
+
+            <div class="info-modal">
+                <div class="modal-content">
+                    <h2 class="message"></h2>
+                    <br>
+                    <p class="info"></p>
+                     <br>
+                    <button class="menu-button" onclick="">Close</button>
+                </div>
+            </div>
+            
+
             <div id="header">
                 <h1>Classic Arcade Game</h1>
             </div>
-            <div class="menu1">
+            <!-- <div class="menu1">
                 <ul>
-                    <li><button class="menu-button">Start Game</button></li>
-                    <li><button class="menu-button">Instructions</button></li>
+                    <li><button class="menu-button" onclick="restartGame()">Start Game</button></li>
+                    <li><button class="menu-button" onclick="info()">Instructions</button></li>
                     <li><button class="menu-button">About</button></li>
                 </ul>
-            </div>
+            </div> -->
             <p id="timer"></p>
             <div class="score">
                     <p class="points">POINTS</p>
                     <p id="points">0</p>
-                    <p id = "lives">LIVES</p>
-                    <span>2</span>
+                    <p class="lives">LIVES</p>
+                    <span id = "lives">
+                        <img src="images/Heart.png" alt="life" class="lifeImg">
+                        <img src="images/Heart.png" alt="life" class="lifeImg">
+                    </span>
             </div>
-            
-           
-  
-   
-    
+
     <script src="js/resources.js"></script>
     <script src="js/engine.js"></script>
     <footer>
@@ -41,6 +55,5 @@
     </footer>
     <script src="js/appHelper.js"></script>
     <script src="js/app.js"></script>
-   
 </body>
 </html>
