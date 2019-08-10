@@ -2,6 +2,7 @@
 const points = document.querySelector("#points");
 const lives = document.querySelector("#lives");
 
+// Game key object
 let gameKey = {
   sprite: "images/Key.png",
   posX: 200,
@@ -14,7 +15,7 @@ let gameKey = {
 //     gameMessages.message('instructions');
 // }
 
-
+//this object stores messages for when the player wins or loses
 const gameMessages = {
   win: "Congrats! You Found The Magic Key",
   lost: "You Lost! You Are In Heaven Now",
@@ -43,6 +44,7 @@ const gameMessages = {
   }
 };
 
+//Gem class
 function Gems(gemName) {
   this.sprite = `images/Gem${gemName}.png`;
   this.points = function() {
@@ -77,6 +79,7 @@ function shuffle(array) {
   }
 }
 
+//Key collision function helps detectd a collision when the key is displayed
 function keyCollision() {
   var modal = document.querySelector(".modal");
   if (
@@ -91,6 +94,7 @@ function keyCollision() {
   }
 }
 
+//Gemm collision function, detects the collision between player and gems
 function gemCollision() {
   if (player.positionY === 72) {
     gemCollisionHelper(120);
@@ -102,7 +106,7 @@ function gemCollision() {
     keyCollision();
   }
 }
-
+//Helps the gemCollision function detect collisions 
 function gemCollisionHelper(posY) {
   for (let col = 0; col < allGems.length; col++) {
     if (
@@ -120,6 +124,7 @@ function gemCollisionHelper(posY) {
   }
 }
 
+//Generates new gems
 function newGems() {
   let gemController = 0;
   shuffle(mapArray);

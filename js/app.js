@@ -195,6 +195,7 @@ let addMoreGems = newGems(),
   }
 })();
 
+// This function helps creating the gems of the game
 function createGem(index, controller) {
   var gemColor = ["Blue", "Green", "Orange"];
   if (showKey !== true) {
@@ -211,7 +212,7 @@ function createGem(index, controller) {
     allGems.push(gems);
   }
 }
-
+// Game restart
 function restartGame() {
   var modal = document.querySelector(".modal");
   var img = document.createElement('img');
@@ -233,6 +234,7 @@ function restartGame() {
   });
 }
 
+//IIFI to load the Gems coordinates 
 (function loadCoordinates() {
   var x = 10,
     y = [120, 200, 285];
@@ -248,6 +250,7 @@ function restartGame() {
   }
 })();
 
+// IIFI that loads the enemies and the gems
 (gameLoad = function loadEnemiesAndGems() {
   var count = 0;
 
@@ -289,6 +292,8 @@ document.addEventListener("keyup", function(e) {
   player.handleInput(allowedKeys[e.keyCode]);
 });
 
+
+// Triggers enemy movement
 allEnemies.forEach(object => {
   object.move();
 });
