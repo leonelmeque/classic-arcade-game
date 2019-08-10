@@ -5,7 +5,9 @@
 body {
     text-align: center;
     background: rgb(116, 185, 255);
+    /* position:relative; */
 }
+
 
 .menu1{
     display: flex;
@@ -47,7 +49,7 @@ canvas{
     text-align: center;
     border:none;
     cursor: pointer;
-    width: 100%;
+    width: 200px;
     text-decoration:none;
 }
 
@@ -57,18 +59,26 @@ canvas{
 
 .modal {
     background: rgba(214, 48, 49,0.8);
-    height: 100vmax;
+    height: 100%;
     width: 100%;
-    position: absolute;
-    display: none;
+    position: fixed;
+    visibility: hidden;
+    display:flex;
 }
 
 .modal-content .menu-button{
-    width: 300px;
-    margin: 0 auto;
+    /* max-height: 45px; */
+  
 }
 
 .modal-content{
-     height: inherit;
+     display:flex;
+     flex-direction: column;
+     align-items: center;
+     width:100%;
      margin: auto 0;
+}
+
+footer{
+    height: 50px;
 }
